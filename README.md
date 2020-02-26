@@ -1,7 +1,7 @@
 
 # Nginx ModSecurity CRS
 
-
+Docker Compose project to setup a ModSecurity enabled Nginx container with the CRS.
 
 # Usage
 
@@ -63,11 +63,14 @@ The output of the audit log looks like this:
 ModSecurity: Warning. detected XSS using libinjection. [file "/etc/modsecurity/crs/rules/REQUEST-941-APPLICATION-ATTACK-XSS.conf"] [line "37"] [id "941100"] [rev ""] [msg "XSS Attack Detected via libinjection"] [data "Matched Data: XSS data found within ARGS:param: "><script>alert(1);</script>"] [severity "2"] [ver "OWASP_CRS/3.2.0"] [maturity "0"] [accuracy "0"] [tag "application-multi"] [tag "language-multi"] [tag "platform-multi"] [tag "attack-xss"] [tag "OWASP_CRS"] [tag "OWASP_CRS/WEB_ATTACK/XSS"] [tag "WASCTC/WASC-8"] [tag "WASCTC/WASC-22"] [tag "OWASP_TOP_10/A3"] [tag "OWASP_AppSensor/IE1"] [tag "CAPEC-242"] [hostname "172.22.0.1"] [uri "/"] [unique_id "158272291834.052399"] [ref "v12,28t:utf8toUnicode,t:urlDecodeUni,t:htmlEntityDecode,t:jsDecode,t:cssDecode,t:removeNulls"]
 ```
 
-An XSS attack has ben detected by rule number 941100. Now you would decide wether to disable this rule by updating the `etc/modsecurity/RESPONSE-999-EXCLUSION-RULES-AFTER-CRS.conf` file or update your application.
+An XSS attack has ben detected by rule number `941100`.  
+Now you would decide wether to disable this rule by updating the `etc/modsecurity/RESPONSE-999-EXCLUSION-RULES-AFTER-CRS.conf` file or update your application.
 
 ## Production
 
-If your application has been tested and the audit logs does not have any new entries, the security engine can be enabled. Another example on how to do this:
+If your application has been tested and the audit log does not have any new entries, the security engine can be enabled.
+
+Edit the ModSecuity config to do so.
 
 **etc/modsecurity.d/modsecurity.conf**
 
@@ -104,7 +107,7 @@ The request has been blocked.
 
 # Templates
 
-The `etc` folder contains various config files. These files have been copied either from the Nginx Docker image or the modsecurity Core Rule Set repository.
+The `etc` folder of this repo contains various config files. These files have been copied either from the Nginx Docker image or the ModSecurity Core Rule Set repository.
 
 Here is a list of the config files an their source:
 
@@ -114,6 +117,8 @@ Here is a list of the config files an their source:
 [etc/nginx/conf.d/default.template](https://github.com/CRS-support/modsecurity-docker/blob/v3/nginx-nginx/Dockerfile)  
 
 ## Edits
+
+I wanna show you which templates I have edited in what way.
 
 The default security rule has been enabled.
 
@@ -128,3 +133,9 @@ SecDefaultAction "phase:1,deny,log"
 Rules are included by wildcard.
 
 **etc/modsecurity.d/include.conf**
+
+```
+...
+Include /etc/modsecurity/crs/rules/*.conf
+...
+```
