@@ -1,0 +1,14 @@
+version: "3"
+services:
+  waf:
+    image: owasp/modsecurity:3-nginx
+    ports:
+      - "443:443"
+    volumes:
+      - "$PWD/etc/modsecurity:/etc/modsecurity"
+      - "$PWD/etc/modsecurity.d/include.conf:/etc/modsecurity.d/include.conf"
+      - "$PWD/etc/modsecurity.d/modsecurity.conf:/etc/modsecurity.d/modsecurity.conf"
+      - "$PWD/etc/nginx/conf.d/default.template:/etc/nginx/conf.d/default.template"
+    environment:
+      - SERVERNAME=localhost
+    command: /bin/bash -c "envsubst '$$SERVERNAME' < /etc/nginx/conf.d/default.template > /etc/nginx/conf.d/default.conf && exec nginx -g 'daemon off;'"
