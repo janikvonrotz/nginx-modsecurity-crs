@@ -3,7 +3,7 @@
 
 Docker Compose project to setup a ModSecurity enabled Nginx container with the CRS.
 
-# Usage
+## Usage
 
 Clone this repository.
 
@@ -24,7 +24,7 @@ Run Docker Compose.
 docker-compose up -d
 ```
 
-## Audit
+### Audit
 
 By default the Nginx container starts in audit mode. Before enabling the security engine you want to ensure that ModSecurity does not block any false positives. Therefore you evalute your application in audit mode.
 
@@ -60,13 +60,22 @@ Accept-Ranges: bytes
 The output of the audit log looks like this:
 
 ```txt
-ModSecurity: Warning. detected XSS using libinjection. [file "/etc/modsecurity/crs/rules/REQUEST-941-APPLICATION-ATTACK-XSS.conf"] [line "37"] [id "941100"] [rev ""] [msg "XSS Attack Detected via libinjection"] [data "Matched Data: XSS data found within ARGS:param: "><script>alert(1);</script>"] [severity "2"] [ver "OWASP_CRS/3.2.0"] [maturity "0"] [accuracy "0"] [tag "application-multi"] [tag "language-multi"] [tag "platform-multi"] [tag "attack-xss"] [tag "OWASP_CRS"] [tag "OWASP_CRS/WEB_ATTACK/XSS"] [tag "WASCTC/WASC-8"] [tag "WASCTC/WASC-22"] [tag "OWASP_TOP_10/A3"] [tag "OWASP_AppSensor/IE1"] [tag "CAPEC-242"] [hostname "172.22.0.1"] [uri "/"] [unique_id "158272291834.052399"] [ref "v12,28t:utf8toUnicode,t:urlDecodeUni,t:htmlEntityDecode,t:jsDecode,t:cssDecode,t:removeNulls"]
+ModSecurity: Warning. detected XSS using libinjection. 
+[file "/etc/modsecurity/crs/rules/REQUEST-941-APPLICATION-ATTACK-XSS.conf"]
+[line "37"] [id "941100"] [rev ""] [msg "XSS Attack Detected via libinjection"] 
+[data "Matched Data: XSS data found within ARGS:param: "><script>alert(1);</script>"] 
+[severity "2"] [ver "OWASP_CRS/3.2.0"] [maturity "0"] [accuracy "0"] [tag "application-multi"] 
+[tag "language-multi"] [tag "platform-multi"] [tag "attack-xss"] [tag "OWASP_CRS"] 
+[tag "OWASP_CRS/WEB_ATTACK/XSS"] [tag "WASCTC/WASC-8"] [tag "WASCTC/WASC-22"] 
+[tag "OWASP_TOP_10/A3"] [tag "OWASP_AppSensor/IE1"] [tag "CAPEC-242"] [hostname "172.22.0.1"] 
+[uri "/"] [unique_id "158272291834.052399"] 
+[ref "v12,28t:utf8toUnicode,t:urlDecodeUni,t:htmlEntityDecode,t:jsDecode,t:cssDecode,t:removeNulls"]
 ```
 
 An XSS attack has ben detected by rule number `941100`.  
 Now you would decide wether to disable this rule by updating the `etc/modsecurity/RESPONSE-999-EXCLUSION-RULES-AFTER-CRS.conf` file or update your application.
 
-## Production
+### Production
 
 If your application has been tested and the audit log does not have any new entries, the security engine can be enabled.
 
@@ -105,7 +114,7 @@ Connection: keep-alive
 
 The request has been blocked.
 
-# Templates
+## Templates
 
 The `etc` folder of this repo contains various config files. These files have been copied either from the Nginx Docker image or the ModSecurity Core Rule Set repository.
 
@@ -116,7 +125,7 @@ Here is a list of the config files an their source:
 [etc/modsecurity.d/modsecurity.conf](https://github.com/SpiderLabs/ModSecurity/blob/v3/master/modsecurity.conf-recommended)  
 [etc/nginx/conf.d/default.template](https://github.com/CRS-support/modsecurity-docker/blob/v3/nginx-nginx/Dockerfile)  
 
-## Edits
+### Edits
 
 I wanna show you which templates I have edited in what way.
 
